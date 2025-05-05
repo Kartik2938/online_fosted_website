@@ -1,0 +1,58 @@
+{% for job in jobs %}
+  <div class="job-card me-3" style="min-width: 300px;">
+  <div class="card h-100 shadow-sm border-0">
+    <div class="card-body">
+      <span class="badge bg-light text-dark mb-2">{{ job.get_category_display }}</span>
+      <h5 class="card-title">
+        <a href="{% url 'jobs_detail' job.job_id %}" class="text-decoration-none text-dark">
+          {{ job.job_title }}
+        </a>
+      </h5>
+      <p class="small text-muted">Posted on: {{ job.pub_date }}</p>
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <a href="{% url 'add_to_cart' job.job_id %}" class="btn btn-outline-primary btn-sm">Save Job</a>
+        <a href="{% url 'jobs_detail' job.job_id %}" class="btn btn-primary btn-sm">Details</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let page = 2; // Start from page 2 (assuming page 1 is already loaded)
+  const jobsContainer = document.getElementById('jobs-container');
+  const spinner = document.getElementById('spinner');
+
+  const observer = new IntersectionObserver(async (entries) => {
+    const entry = entries[0];
+    if (entry.isIntersecting) {
+      spinner.style.display = 'inline-block';
+
+      try {
+        const response = await fetch(`/load-more-jobs/?page=${page}`);
+        if (response.ok) {
+          const html = await response.text();
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = html;
+
+          const newJobs = tempDiv.querySelectorAll('.job-card'); // Adjust based on your card class
+          newJobs.forEach(job => jobsContainer.insertBefore(job, spinner.parentNode));
+
+          page++;
+        }
+      } catch (err) {
+        console.error('Error loading more jobs:', err);
+      }
+
+      spinner.style.display = 'none';
+    }
+  }, {
+    root: jobsContainer,
+    rootMargin: '0px',
+    threshold: 1.0,
+  });
+
+  observer.observe(document.getElementById('load-trigger'));
+</script>
+
+{% endfor %}
+

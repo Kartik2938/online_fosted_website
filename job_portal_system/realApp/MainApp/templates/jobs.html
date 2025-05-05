@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<table>
+    <thead border="1">
+        <tr>
+            <th>job Name:</th>
+            <th>job Description:</th>
+            <th>job Category:</th>
+            <th>Add to Cart</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for job in jobs %}
+        <tr>
+            <td>{{ job.job_name }}</td>
+            <td>{{ job.job_desc }}</td>
+            <td>{{ job.category }}</td>
+            <td><a href="{% url 'add_to_cart' job_id=job.job_id %}">Add to Cart</a></td>
+        </tr>
+        {% endfor %}
+
+</table>
+{% endblock content %}

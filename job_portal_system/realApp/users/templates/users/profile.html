@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Profile</h2>
+{% if user.profile_picture and user.profile_picture.url %}
+    <img src="{{ user.profile_picture.url }}" class="rounded-circle" width="100" height="100" alt="Profile Picture">
+{% else %}
+    <img src="/static/images/default-profile.png" class="rounded-circle" width="100" height="100" alt="Default Profile Picture">
+{% endif %}
+<p>Username: {{ user.username }}</p>
+<p>Email: {{ user.email }}</p>
+<p>Bio: {{ user.bio }}</p>
+{% endblock %}

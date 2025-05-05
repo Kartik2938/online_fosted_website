@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .dashboard-container:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 28px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-section {
+        padding: 2rem;
+        background: #f8f9ff;
+        border-radius: 12px;
+        margin-bottom: 3rem;
+        animation: slideIn 0.6s ease-out;
+    }
+
+    .job-table {
+        border-collapse: separate;
+        border-spacing: 0 12px;
+        width: 100%;
+    }
+
+    .job-table thead th {
+        background: #f8f9ff;
+        color: #2d3748;
+        font-weight: 600;
+        padding: 1rem 1.5rem;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .job-table tbody tr {
+        background: white;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .job-table tbody tr:hover {
+        transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .job-table td {
+        padding: 1.2rem 1.5rem;
+        vertical-align: middle;
+        border-top: 1px solid #edf2f7;
+    }
+
+    .form-control-modern {
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control-modern:focus {
+        border-color: #667eea;
+        box-shadow: 0 2px 6px rgba(102, 126, 234, 0.1);
+    }
+
+    .btn-action {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-save {
+        background: #667eea;
+        color: white;
+    }
+
+    .btn-save:hover {
+        background: #5a67d8;
+        transform: translateY(-1px);
+    }
+
+    .btn-delete {
+        background: #fc8181;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background: #f56565;
+        transform: translateY(-1px);
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-container {
+            padding: 1rem;
+            margin: 1rem;
+        }
+        
+        .job-table {
+            display: block;
+            overflow-x: auto;
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+    <h2 class="mb-4 text-primary font-bold text-2xl">Job Management Dashboard</h2>
+
+    <!-- Add Job Form -->
+    <form method="post" class="form-section" action="{% url 'add_job' %}">
+        {% csrf_token %}
+        <input type="hidden" name="add_job" value="true">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <input type="text" name="title" class="form-control-modern form-control" 
+                       placeholder="Job Title" required>
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="location" class="form-control-modern form-control" 
+                       placeholder="Location" required>
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="salary" class="form-control-modern form-control" 
+                       placeholder="Salary" required>
+            </div>
+            <div class="col-md-12">
+                <textarea name="description" class="form-control-modern form-control" 
+                          placeholder="Job Description" rows="2" required></textarea>
+            </div>
+            <div class="col-md-12">
+                <button type="submit" class="btn-action btn-save">
+                    <i class="bi bi-plus-lg"></i> Add Job
+                </button>
+            </div>
+        </div>
+    </form>
+    
+
+    <!-- Existing Jobs Table -->
+    <h4 class="text-secondary mb-3 font-semibold">Active Job Listings</h4>
+    {% if jobs %}
+    <div class="table-responsive">
+        <table class="job-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                    <th>Salary</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in jobs %}
+                <tr>
+
+                        <td>{{ job.title }}</td>
+    <td>{{ job.description }}</td>
+    <td>{{ job.location }}</td>
+    <td>{{ job.salary }}</td>
+                        <td>
+                            <a href="{% url 'update_job' job.id %}" class="btn btn-primary">Edit</a>
+                        </td>
+                        <td>
+                    <form method="post" class="inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="delete_job" value="true">
+                        <input type="hidden" name="job_id" value="{{ job.id }}">
+                        <button type="submit" class="btn-action btn-delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </td>
+                </tr>
+                {% endfor %}
+                
+
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="text-center p-4 text-gray-500">
+            No active job listings found
+        </div>
+    {% endif %}
+</div>
+{% endblock content %} 

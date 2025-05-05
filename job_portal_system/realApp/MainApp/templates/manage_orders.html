@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .manage-orders-container {
+        max-width: 900px;
+        margin: 60px auto;
+        padding: 0 15px;
+    }
+
+    .manage-title {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 30px;
+        text-align: center;
+        color: #2c3e50;
+    }
+
+    .order-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        padding: 20px 24px;
+        background-color: #fff;
+        margin-bottom: 25px;
+        transition: 0.3s ease;
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .status-badge {
+        font-size: 0.9rem;
+        background-color: #f1f1f1;
+        color: #555;
+        padding: 6px 12px;
+        border-radius: 20px;
+    }
+
+    .job-list {
+        margin: 15px 0;
+        padding-left: 18px;
+    }
+
+    .job-list li {
+        margin-bottom: 6px;
+        color: #444;
+    }
+
+    .status-form {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .status-form select {
+        min-width: 140px;
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .btn-update {
+        background-color: #007bff;
+        color: white;
+        padding: 6px 18px;
+        font-size: 0.95rem;
+        border: none;
+        border-radius: 6px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-update:hover {
+        background-color: #0056b3;
+    }
+
+    .no-orders {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #777;
+        margin-top: 100px;
+    }
+</style>
+
+<div class="manage-orders-container">
+    <div class="manage-title">Manage Orders</div>
+
+    {% for order in orders %}
+        <div class="order-card">
+            <div class="order-header">
+                <div>Order #{{ order.id }} by {{ order.user.username }}</div>
+                <div class="status-badge">Status: {{ order.status }}</div>
+            </div>
+
+            <div>
+                <strong>jobs:</strong>
+                <ul class="job-list">
+                    {% for job in order.jobs.all %}
+                        <li>{{ job.job_name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <form method="POST" action="{% url 'update_order_status' order.id %}" class="status-form">
+                {% csrf_token %}
+                <select name="status">
+                    {% for key, label in status_choices %}
+                        <option value="{{ key }}" {% if key == order.status %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn-update">Update</button>
+            </form>
+        </div>
+    {% empty %}
+        <div class="no-orders">No orders available.</div>
+    {% endfor %}
+</div>
+{% endblock %}

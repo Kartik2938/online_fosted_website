@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="main">
+
+  <!--=============== HERO SECTION ===============-->
+  <section class="home section--lg bg-light py-5">
+    <div class="container d-flex flex-column flex-lg-row align-items-center justify-content-between gap-5">
+      
+      <!-- Text Block Animation -->
+      <div class="text-lg-start text-center" data-aos="fade-right" data-aos-delay="100" data-aos-duration="1000">
+        <h1 class="display-5 fw-bold mb-3 text-primary">
+          Find Your Dream Job <br><span class="text-dark">From Top Companies</span>
+        </h1>
+        <p class="lead text-muted mb-4">
+          Discover fresh listings, trending roles, and exclusive opportunities across the globe.
+        </p>
+        <a href="{% url 'shop' %}" class="btn btn-primary btn-lg shadow-sm">Browse Jobs</a>
+      </div>
+  
+      <!-- Image Block Animation -->
+      <div data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000">
+        <img src="{% static 'pics/logo.png' %}" alt="Hero Image" class="img-fluid" style="max-height: 320px;">
+      </div>
+      
+    </div>
+  </section>
+  
+
+  <!--=============== POPULAR CATEGORIES ===============-->
+  <section class="categories container section py-5">
+    <h3 class="section__title text-center mb-4" data-aos="fade-up">
+      Explore <span class="text-primary">Popular Categories</span>
+    </h3>
+    <div class="swiper categories__container">
+      <div class="swiper-wrapper">
+        {% for key, value in category_choices %}
+          <a href="{% url 'category_filter' key %}" class="category__item swiper-slide text-center p-4 border rounded shadow-sm">
+            <div class="icon mb-2"><i class="fi fi-rs-briefcase text-primary fs-3"></i></div>
+            <h5 class="fw-semibold text-dark">{{ value }}</h5>
+          </a>
+        {% endfor %}
+      </div>
+      <div class="swiper-button-prev"><i class="fi fi-rs-angle-left"></i></div>
+      <div class="swiper-button-next"><i class="fi fi-rs-angle-right"></i></div>
+    </div>
+  </section>
+
+
+  <div class="container py-5">
+    <h3 class="section__title mb-4">✨ Popular Jobs</h3>
+  
+    <div id="jobs-scroll-wrapper" class="horizontal-scroll">
+      <div id="jobs-container" class="job-row d-flex flex-nowrap overflow-hidden">
+        {% include 'partials/job_cards.html' %}
+      </div>
+    </div>
+  </div>
+  
+
+  <!--=============== FEATURED JOBS ===============-->
+  <section class="jobs container section py-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="section__title">✨ Popular Jobs</h3>
+    </div>
+    <div class="row g-4">
+        {% if jobs %}
+            <ul class="jobs-list">
+                {% for job in jobs %}
+                    <li class="job-card" style="animation-delay: {{ forloop.counter0|add:1|divisibleby:10|yesno:'0.1,0'|floatformat:1 }}s;">
+                        <h2 class="job-title">{{ job.title }}</h2>
+                        <div class="job-meta">
+                            <span class="job-location">
+                                <!-- SVG icon -->
+                                {{ job.location }}
+                            </span>
+                        </div>
+                        <span class="job-salary">
+                            <!-- SVG icon -->
+                            {{ job.salary }}
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+        <p>no jobs found</p>
+        {% endif %}
+    </div>
+  </section>
+
+
+
+  
+  
+  
+
+
+
+
+
+
+  <!--=============== SHOWCASE ===============-->
+  <section class="showcase section bg-light py-5">
+    <div class="container">
+      <h3 class="text-center mb-5 section__title" data-aos="fade-up">💼 Featured Roles by Industry</h3>
+  
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        <!-- IT & Software -->
+        <div class="col" data-aos="fade-up" data-aos-delay="100">
+          <div class="showcase__card bg-white p-4 shadow-sm h-100 rounded border-start border-4 border-primary">
+            <h5 class="fw-semibold mb-3 text-primary">IT & Software</h5>
+            <p class="mb-1">🖥️ Backend Developer – <span class="text-dark">TechCorp (Bangalore)</span></p>
+            <p class="text-muted small">💸 ₹70,000/month</p>
+          </div>
+        </div>
+  
+        <!-- Marketing -->
+        <div class="col" data-aos="fade-up" data-aos-delay="200">
+          <div class="showcase__card bg-white p-4 shadow-sm h-100 rounded border-start border-4 border-success">
+            <h5 class="fw-semibold mb-3 text-success">Marketing</h5>
+            <p class="mb-1">📈 Digital Marketer – <span class="text-dark">AdWave (Mumbai)</span></p>
+            <p class="text-muted small">💸 ₹45,000/month</p>
+          </div>
+        </div>
+  
+        <!-- Finance -->
+        <div class="col" data-aos="fade-up" data-aos-delay="300">
+          <div class="showcase__card bg-white p-4 shadow-sm h-100 rounded border-start border-4 border-warning">
+            <h5 class="fw-semibold mb-3 text-warning">Finance</h5>
+            <p class="mb-1">💰 Financial Analyst – <span class="text-dark">FinEdge (Pune)</span></p>
+            <p class="text-muted small">💸 ₹55,000/month</p>
+          </div>
+        </div>
+  
+        <!-- Design -->
+        <div class="col" data-aos="fade-up" data-aos-delay="400">
+          <div class="showcase__card bg-white p-4 shadow-sm h-100 rounded border-start border-4 border-danger">
+            <h5 class="fw-semibold mb-3 text-danger">Design</h5>
+            <p class="mb-1">🎨 UI/UX Designer – <span class="text-dark">PixelLab (Bengaluru)</span></p>
+            <p class="text-muted small">💸 ₹50,000/month</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+
+  <!--=============== NEWSLETTER ===============-->
+  <section class="newsletter section py-5 bg-primary text-white">
+    <div class="container d-flex flex-column flex-lg-row align-items-center justify-content-between gap-4">
+      <div>
+        <h3 class="fw-bold mb-2"><i class="bi bi-envelope-fill me-2"></i>Stay Updated</h3>
+        <p class="mb-0">Subscribe to get the latest job postings straight to your inbox.</p>
+      </div>
+      <form action="" method="POST" class="d-flex flex-wrap gap-2">
+        <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+        <button type="submit" class="btn btn-light text-primary">Subscribe</button>
+      </form>
+    </div>
+  </section>
+</main>
+{% endblock %}
+
+{% block extra_script %}
+<script>
+  let page = 2; // Start from page 2 (assuming page 1 is already loaded)
+  const jobsContainer = document.getElementById('jobs-container');
+  const spinner = document.getElementById('spinner');
+
+  const observer = new IntersectionObserver(async (entries) => {
+    const entry = entries[0];
+    if (entry.isIntersecting) {
+      spinner.style.display = 'inline-block';
+
+      try {
+        const response = await fetch(`/load-more-jobs/?page=${page}`);
+        if (response.ok) {
+          const html = await response.text();
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = html;
+
+          const newJobs = tempDiv.querySelectorAll('.job-card'); // Adjust based on your card class
+          newJobs.forEach(job => jobsContainer.insertBefore(job, spinner.parentNode));
+
+          page++;
+        }
+      } catch (err) {
+        console.error('Error loading more jobs:', err);
+      }
+
+      spinner.style.display = 'none';
+    }
+  }, {
+    root: jobsContainer,
+    rootMargin: '0px',
+    threshold: 1.0,
+  });
+
+  observer.observe(document.getElementById('load-trigger'));
+</script>
+
+  
+{% endblock extra_script %}

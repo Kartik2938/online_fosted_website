@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">📝 Manage Jobs</h2>
+    <a href="{% url 'edit_job' job.job_id %}" class="btn btn-sm btn-primary">Edit</a>
+
+<!-- Delete form for safety -->
+<form action="{% url 'delete_job' job.job_id %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+</form>
+
+</div>
+{% endblock %}

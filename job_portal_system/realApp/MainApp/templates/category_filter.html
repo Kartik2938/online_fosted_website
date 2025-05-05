@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h2>Products in "{{ category|title }}"</h2>
+<div class="products">
+  {% for product in products %}
+    <div class="product-card">
+      <h4>{{ product.name }}</h4>
+      <p>{{ product.description }}</p>
+      <!-- Add image, price, etc. -->
+    </div>
+  {% empty %}
+    <p>No products found in this category.</p>
+  {% endfor %}
+</div>
+{% endblock content %}

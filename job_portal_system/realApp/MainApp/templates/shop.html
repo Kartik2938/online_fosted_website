@@ -1,0 +1,32 @@
+<!-- shop.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-3 mb-2">
+    <h2>Welcome to Our Jobify!</h2>
+    <p>Browse our wide selection of Jobs and Internships.</p>
+    
+    <section class="categories container section py-5">
+      <h3 class="section__title text-center mb-4" data-aos="fade-up">
+        Explore <span class="text-primary">Popular Categories</span>
+      </h3>
+      <div class="swiper categories__container">
+        <div class="swiper-wrapper">
+          {% for key, value in category_choices %}
+            <a href="{% url 'category_filter' key %}" class="category__item swiper-slide text-center p-4 border rounded shadow-sm">
+              <div class="icon mb-2"><i class="fi fi-rs-briefcase text-primary fs-3"></i></div>
+              <h5 class="fw-semibold text-dark">{{ value }}</h5>
+            </a>
+          {% endfor %}
+        </div>
+        <div class="swiper-button-prev"><i class="fi fi-rs-angle-left"></i></div>
+        <div class="swiper-button-next"><i class="fi fi-rs-angle-right"></i></div>
+      </div>
+    </section>
+
+
+
+    <a href="{% url 'dashboard' %}" class="btn btn-primary mt-3">Go To Home</a>
+</div>
+{% endblock %}

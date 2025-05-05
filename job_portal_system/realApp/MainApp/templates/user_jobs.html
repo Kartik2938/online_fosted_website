@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<style>
+    .jobs-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .jobs-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        padding: 0;
+        list-style: none;
+    }
+
+    .job-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        animation: fadeInUp 0.5s ease forwards;
+        opacity: 0;
+    }
+
+    .job-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .job-title {
+        color: #1a365d;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .job-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        color: #4a5568;
+    }
+
+    .job-salary {
+        color: #2b6cb0;
+        font-weight: 500;
+    }
+
+    .apply-button {
+        display: inline-block;
+        background: #4299e1;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .apply-button:hover {
+        background: #3182ce;
+        transform: translateY(-2px);
+    }
+
+    .no-jobs {
+        text-align: center;
+        padding: 4rem;
+        background: #f8fafc;
+        border-radius: 12px;
+        font-size: 1.25rem;
+        color: #1a365d;
+    }
+
+    .no-jobs p {
+        margin: 0;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .jobs-list {
+            grid-template-columns: 1fr;
+        }
+        
+        .job-card {
+            padding: 1.5rem;
+        }
+    }
+</style>
+<div class="jobs-container">
+    {% if jobs %}
+      <ul class="jobs-list">
+        {% for job in jobs %}
+          <li class="job-card" style="animation-delay: {{ forloop.counter0|add:1|divisibleby:10|yesno:'0.1,0'|floatformat:1 }}s;">
+            <h2 class="job-title">{{ job.title }}</h2>
+            <div class="job-meta">
+              <span><strong>Location:</strong> {{ job.location }}</span>
+              <span class="job-salary"><strong>Salary:</strong> {{ job.salary }}</span>
+            </div>
+
+            {% if job.id in applied_job_ids %}
+              <button class="btn btn-secondary" disabled>Applied</button>
+            {% else %}
+              <a href="{% url 'apply_for_job' job.id %}" class="btn btn-primary">Apply Now</a>
+            {% endif %}
+
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="no-jobs">
+        <p>🌟 No positions available at the moment</p>
+        <p class="text-sm mt-2 text-slate-500">Check back later or subscribe to our updates</p>
+      </div>
+    {% endif %}
+</div>
+
+{% endblock content %}

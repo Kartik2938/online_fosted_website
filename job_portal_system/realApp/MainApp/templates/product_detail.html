@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .job-wrapper {
+        max-width: 1000px;
+        margin: 60px auto;
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+    }
+
+    .job-info {
+        flex: 1 1 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .job-info h2 {
+        font-size: 2.2rem;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    .job-info p {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 12px;
+        line-height: 1.6;
+    }
+
+    .btn-add-to-cart {
+        margin-top: 30px;
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px 30px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-add-to-cart:hover {
+        background-color: #0056b3;
+    }
+
+    .login-prompt {
+        margin-top: 20px;
+    }
+
+    .login-prompt a {
+        color: #007bff;
+        font-weight: 500;
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .job-wrapper {
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        .job-info {
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="job-wrapper">
+    <div class="job-info">
+        <h2>{{ job.job_title }}</h2>
+        <p><strong>Description:</strong> {{ job.job_description }}</p>
+        <p><strong>Category:</strong> {{ job.get_category_display }}</p>
+        <p><strong>Published:</strong> {{ job.pub_date }}</p>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'add_to_cart' job.job_id %}" class="btn-add-to-cart">Save Job</a>
+        {% else %}
+            <p class="login-prompt">
+                <a href="{% url 'login' %}">Login</a> to save this job.
+            </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
